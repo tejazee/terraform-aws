@@ -1,0 +1,34 @@
+name: RepoAccess
+on:
+  workflow_dispatch:
+     inputs:
+      teamsorpeople:
+        type: choice
+        description: select teams or indivisual
+        options:
+        - addteams
+        - addpeople
+      githubid:
+        description: 'Githubid'     
+        required: true
+        default: 'Provide the Githubid(s)'
+      githubrepo:
+        description: 'GithubRepoName'     
+        required: true
+        default: 'Provide the GitReponame(s)'  
+      useraccess:
+        type: choice
+        description: select the role
+        options:
+        - read
+        - write          
+jobs:
+  repoaccess:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: provide the access to github
+      run: |   
+            chmod +x ./gitaccess.sh
+            ./gitaccess.sh "${{ github.event.inputs.teamsorpeople }}" "${{ github.event.inputs.githubid }}" "${{ github.event.inputs.githubrepo }}" "${{ github.event.inputs.useraccess }}" ${{ secrets.SELFSERVICE_GITHUB_TOKEN }}
+      shell: bash
