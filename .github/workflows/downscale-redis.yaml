@@ -1,0 +1,30 @@
+name: downscale-redis-shard-node-instance-type
+on:
+  workflow_dispatch:
+    inputs:
+      clusters_id:
+        description: "Redis clusters id"
+        required: true
+        default: "Provide the cluster ids"
+      instance_type:
+        description: "new instance type"
+        required: true
+        default: "Provide the new instance type"
+      node_groups_to_remove:
+        description: "node_groups_to_remove"
+        required: true
+        default: "Provide the node_groups_to_remove"
+      desired_node_count:
+        description: "desired_node_count"
+        required: true
+        default: "Provide the desired_node_count"
+jobs:
+  downscale-redis:
+    runs-on: self-hosted
+    steps:
+    - uses: actions/checkout@v2
+    - name: downscale redis for instance type, node-group and node count
+      run: |
+            chmod +x ./downscale1.sh
+            ./downscale1.sh  "${{ github.event.inputs.clusters_id }}" "${{ github.event.inputs.instance_type }}" "${{ github.event.inputs.node_groups_to_remove }}" "${{ github.event.inputs.desired_node_count }}"
+      shell: bash
