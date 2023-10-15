@@ -1,0 +1,44 @@
+name: RepoCreation
+on:
+  workflow_dispatch:
+     inputs:
+      teamsorpeople:
+        type: choice
+        description: select teams or indivisual
+        options:
+        - addteams
+        - addpeople
+      githubid:
+        description: 'Githubid'     
+        required: true
+        default: 'Provide the Githubid(s)'
+      githubrepo:
+        description: 'GithubRepoName'     
+        required: true
+        default: 'Provide the GitReponame(s)' 
+jobs:
+  repocreation:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: creating github repo
+      run: |   
+          #  type -p curl >/dev/null || (sudo apt update && sudo apt install curl -y)
+          #  curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg \
+          #  && sudo chmod go+r /usr/share/keyrings/githubcli-archive-keyring.gpg \
+          #  && echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | sudo tee /etc/apt/sources.list.d/github-cli.list > /dev/null \
+          #  && sudo apt update \
+          #  && sudo apt install gh -y
+          #  gh 
+          #  echo ${{ secrets.SELFSERVICE_GITHUB_TOKEN }} | gh auth login --with-token
+          #  echo "${{ github.event.inputs.githubrepo }}"
+          #  gh repo create zee-5/"${{ github.event.inputs.githubrepo }}" --private --add-readme
+          #  gh api \
+          # --method PUT \
+          # -H "Accept: application/vnd.github+json" \
+          # -H "X-GitHub-Api-Version: 2022-11-28" \
+          # /repos/zee-5/"${{ github.event.inputs.githubrepo }}"/collaborators/"${{ github.event.inputs.username }}" \
+          # -f permission='read'
+            chmod +x ./githubrepo.sh
+            ./githubrepo.sh "${{ github.event.inputs.teamsorpeople }}" "${{ github.event.inputs.githubid }}"  "${{ github.event.inputs.githubrepo }}" "${{ secrets.SELFSERVICE_GITHUB_TOKEN }}"
+      shell: bash
