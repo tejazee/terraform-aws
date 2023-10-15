@@ -1,0 +1,73 @@
+name: Redis_Cloud_User_Creation
+on:
+  workflow_dispatch:
+    inputs:
+      Username:
+        description: 'DB UserName'
+        required: true
+      Rolename:
+        description: 'DB RoleName'
+        required: true
+      SubscriptionID:
+        description: 'DB Subscription ID'
+        required: true
+      DatabaseID:
+        description: 'Database ID'
+        required: true
+jobs:
+  Redis_User_Creation:
+    runs-on: ubuntu-latest
+    env:
+      REDIS_CLOUD_API_KEY: "${{secrets.REDIS_CLOUD_API_KEY}}"
+      REDIS_CLOUD_API_SECRET_KEY: "${{secrets.REDIS_CLOUD_API_SECRET_KEY}}"
+    steps:
+      - name: Create Redis user
+        run: |
+          #!/bin/bash
+          sudo apt-get -y install openssl
+          # create env variables
+          export REDIS_CLOUD_API_KEY='${{secrets.REDIS_CLOUD_API_KEY}}'
+          export REDIS_CLOUD_API_SECRET_KEY='${{secrets.REDIS_CLOUD_API_SECRET_KEY}}'
+          USER_NAME=${{github.event.inputs.Username}}
+          PASSWORD=$(openssl rand -base64 12)\n
+          echo $PASSWORD
+          ROLE_NAME=${{github.event.inputs.Rolename}}
+          SUBSCRIPTION_ID=${{github.event.inputs.SubscriptionID}}
+          DATABASE_ID=${{github.event.inputs.DatabaseID}}
+
+          # create a role
+          curl --location -k 'https://api.redislabs.com/v1/acl/roles' \
+          --request POST \
+          --header 'accept: application/json' \
+          --header 'Content-Type: application/json' \
+          --header 'x-api-key: '$REDIS_CLOUD_API_KEY'' \
+          --header 'x-api-secret-key: '$REDIS_CLOUD_API_SECRET_KEY'' \
+          --data '{
+           "name": "'$ROLE_NAME'",
+            "redisRules": [
+              {
+                "ruleName": "Read-Write",
+                "databases": [
+                  {
+                    "subscriptionId": '$SUBSCRIPTION_ID',
+                    "databaseId": '$DATABASE_ID',
+                    "regions": []
+                  }
+                ]
+              }
+            ]
+          }' > ./test_role.json
+          cat ./test_role.json
+          #Redis User creation          
+          curl --location -k 'https://api.redislabs.com/v1/acl/users' \
+          --request POST \
+          --header 'accept: application/json' \
+          --header 'Content-Type: application/json' \
+          --header 'x-api-key: '$REDIS_CLOUD_API_KEY'' \
+          --header 'x-api-secret-key: '$REDIS_CLOUD_API_SECRET_KEY'' \
+          --data '{
+            "name": "'$USER_NAME'",
+            "role": "'$ROLE_NAME'",
+            "password": "'$PASSWORD'"
+          }' > ./test_user.json
+          cat ./test_user.json
