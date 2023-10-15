@@ -1,0 +1,34 @@
+name: RedisDownscale-multiple
+on:
+  workflow_dispatch:
+     inputs:
+      cluster1:
+        description: 'Redis cluster1'     
+        required: true
+        default: 'Provide the cluster1'
+      cluster2:
+        description: 'Redis cluster2'     
+        required: true
+        default: 'Provide the cluster2'  
+      cluster3:
+        description: 'Redis cluster3'     
+        required: true
+        default: 'Provide the cluster3'   
+      desired_node_count:
+        description: 'desired_node_count'     
+        required: true
+        default: 'Provide the desired_node_count'
+      # current_node_count:
+      #   description: 'current_node_count'     
+      #   required: true
+      #   default: 'Provide the current_node_count'             
+jobs:
+  downscale:
+    runs-on: self-hosted
+    steps:
+    - uses: actions/checkout@v2
+    - name: downscale cluster
+      run: |   
+            chmod +x ./downscale-multiple.sh
+            ./downscale-multiple.sh  "${{ github.event.inputs.cluster1 }}" "${{ github.event.inputs.cluster2 }}" "${{ github.event.inputs.cluster3 }}" "${{ github.event.inputs.desired_node_count }}"
+      shell: bash
