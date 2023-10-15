@@ -1,0 +1,30 @@
+name: Redisupscale
+on:
+  workflow_dispatch:
+     inputs:
+      cluster1:
+        description: 'Redis cluster1'     
+        required: true
+        default: 'Provide the cluster1'
+      # cluster2:
+      #   description: 'Redis cluster2'     
+      #   required: true
+      #   default: 'Provide the cluster2'  
+      desired_node_count:
+        description: 'desired_node_count'     
+        required: true
+        default: 'Provide the desired_node_count'
+      current_node_count:
+        description: 'current_node_count'     
+        required: true
+        default: 'Provide the current_node_count'             
+jobs:
+  upscale:
+    runs-on: self-hosted
+    steps:
+    - uses: actions/checkout@v2
+    - name: upscale cluster
+      run: |   
+            chmod +x ./upscale.sh
+            ./upscale.sh  "${{ github.event.inputs.cluster1 }}" "${{ github.event.inputs.desired_node_count }}" "${{ github.event.inputs.current_node_count }}"
+      shell: bash
