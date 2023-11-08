@@ -32,12 +32,12 @@ jobs:
           #  gh 
           #  echo ${{ secrets.SELFSERVICE_GITHUB_TOKEN }} | gh auth login --with-token
           #  echo "${{ github.event.inputs.githubrepo }}"
-          #  gh repo create zee-5/"${{ github.event.inputs.githubrepo }}" --private --add-readme
+          #  gh repo create teja-5/"${{ github.event.inputs.githubrepo }}" --private --add-readme
           #  gh api \
           # --method PUT \
           # -H "Accept: application/vnd.github+json" \
           # -H "X-GitHub-Api-Version: 2022-11-28" \
-          # /repos/zee-5/"${{ github.event.inputs.githubrepo }}"/collaborators/"${{ github.event.inputs.username }}" \
+          # /repos/teja-5/"${{ github.event.inputs.githubrepo }}"/collaborators/"${{ github.event.inputs.username }}" \
           # -f permission='read'
             chmod +x ./githubrepo.sh
             ./githubrepo.sh "${{ github.event.inputs.teamsorpeople }}" "${{ github.event.inputs.githubid }}"  "${{ github.event.inputs.githubrepo }}" "${{ secrets.SELFSERVICE_GITHUB_TOKEN }}"
