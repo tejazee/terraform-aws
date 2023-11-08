@@ -14,4 +14,4 @@ jobs:
     - name: creating github repo
       run: |   
            echo ${{ secrets.SELFSERVICE_GITHUB_TOKEN }} | gh auth login --with-token
-           gh api --method=PUT "repos/zee-5/${{ github.event.inputs.githubrepo }}/collaborators/rushik-kumar-zee -f permission=write
+           gh api --method=PUT "repos/teja-5/${{ github.event.inputs.githubrepo }}/collaborators/teja -f permission=write
