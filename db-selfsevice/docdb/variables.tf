@@ -178,3 +178,4 @@ variable "machine_type" {
   description = "tag for machine type"
   default     = "rds"
 }
+variable "db-instance" {}
