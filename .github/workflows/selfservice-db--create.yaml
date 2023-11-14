@@ -1,0 +1,80 @@
+name: rds-db-create
+on:
+  #push:
+  #branches: [ main ]
+  #pull request: 
+  #branches: [ main ]
+  workflow dispatch: 
+    inputs:
+      rds_engine:
+        type: choice 
+        description: "choose RDS engine"
+        options:
+          - Mysql
+          - postgres
+          - mssql
+          - docdb
+          - mysql-aurora
+      rds_identifier:
+        required: true
+        description: "db-indentifier name should be in lowercase alphanumeriric characters/no hypens,space,underscore allowed only mention service name ex - teja/reddy etc" 
+        default: "dbindentifier"
+      rds_name:
+        required: true  
+        description: "db-indentifier name should be in lowercase alphanumeriric characters/no hypens,space,underscore allowed only mention service name ex - teja/reddy etc" 
+        default: "dbname"
+      instance_class:
+        type: choice
+        description: choose instance class
+        options:
+          - db.t3.medium
+          - db.t3.micro
+          - db.t3.nano
+      tag:
+        required: true
+        description: "service-name"  
+        default: "service name"
+jobs:
+  RDS-DB-deploy:
+    runs-on: ubuntu-latest
+    env:
+      #terraform working directory
+      TF_WORKING_DIRECTORY_MYSQL: "terraform-aws/db-selfsevice/mysql"
+      TF_WORKING_DIRECTORY_MsSQL: "terraform-aws/db-selfsevice/mssql"
+      TF_WORKING_DIRECTORY_MYSQL_AURORA: "terraform-aws/db-selfsevice/mysql-aurora"
+      TF_WORKING_DIRECTORY_POSTGRES: "terraform-aws/db-selfsevice/postgres"
+      TF_WORKING_DIRECTORY_DOCDB: "terraform-aws/db-selfsevice/docdb"
+      AWS_ACCESS_KEY_ID: "${{secrets.AWS_ACCESS_KEY_ID}}"
+      AWS_SECRET_ACCESS_KEY: "${{secrets.AWS_SECRET_ACCESS_KEY}}"
+   #steps represents a sequence of tasks
+   steps:
+     #checkout your repository
+     - uses: actions/checkout@v2
+       with:
+         path: TERRAFORM-AWS
+         fetch-depth: "0"
+         ref: main
+     - name: Setup SSH
+       uses: MrSquaare /ssh-setup-auctions@v1
+       with:
+         host: github.com
+         private-key: "${{ secrets.SSH_PRIVATE_KEY }}"  
+     - uses: hashicorp/setup-terraform@v1
+       with:
+         terraform_version: 1.1.7
+     # updating the bucket
+     - id: "update_bucket_mysql"     
+       name: Update Bucket and Terraform Apply for MySql
+       if: ${{ github.event.inputs.rds_engine == 'Mysql' }}   
+       run: |
+         cd ${{ env.TF_WORKING_DIRECTORY_MYSQL }}    
+         cp backend.tf.example backend.tf
+         ls -lrt
+         sed -i 's/UPDATEENV/${{github.event.inputs.rdsidentifier}}/' backend.tf
+         cat backend.tf
+         rm -rf backend.tf
+         terraform init --backend-config="access_key=${{secrets.AWS_ACCESS_KEY_ID}}" --backend-config="secret_key=${{secrets.AWS_SECRET_ACCESS_KEY}}"  
+         terraform validate -no-color
+         terraform plan -no-color -lock=false -var="identifier=${{github.event.inputs.rds_identifier}}" -var="instance_class=${{github.event.inputs.instance_class}}" -var="tag=${{github.event.inputs.tag}}" -var="db_name=${{github.event.inputs.rds_name}}" -var="tag=${{github.event.inputs.tag}}"           
+         terraform apply -auto-approve -lock=false -var="identifier=${{github.event.inputs.rds_identifier}}" -var="instance_class=${{github.event.inputs.instance_class}}" -var="tag=${{github.event.inputs.tag}}" -var="db_name=${{github.event.inputs.rds_name}}" -var="tag=${{github.event.inputs.tag}}"           
+
