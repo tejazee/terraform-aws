@@ -1,0 +1,45 @@
+output "db_instance_id" {
+  description = "The RDS instance id"
+  value       = aws_db_instance.rds.id
+}
+output "db_instance_arn" {
+  description = "The ARN of the RDS instance"
+  value       = aws_db_instance.rds.arn
+}
+output "db_instance_address" {
+  description = "The address of the RDS instance"
+  value       = aws_db_instance.rds.address
+}
+output "db_instance_endpoint" {
+  description = "The connection endpoint"
+  value       = aws_db_instance.rds.endpoint
+}
+output "db_instance_identifier" {
+  description = "The RDS instance identifier"
+  value       = aws_db_instance.rds.identifier
+}
+output "db_subnet_group_id" {
+  description = "The db subnet group id"
+  value       = aws_db_subnet_group.rds.id
+}
+output "db_subnet_group_name" {
+  description = "The db subnet group name"
+  value       = aws_db_subnet_group.rds.name
+}
+#################################################parametergroup
+output "db_parameter_group_id" {
+  description = "The db parameter group id"
+  value       = aws_db_parameter_group.rds.id
+}
+
+output "db_parameter_group_name" {
+  description = "The db parameter group name"
+  value       = aws_db_parameter_group.rds.name
+}
+################################################securitygroup
+output "sg_id" {
+    value = aws_security_group.sec_grp.id
+}
+output "sg_name" {
+    value = aws_security_group.sec_grp.name
+}
