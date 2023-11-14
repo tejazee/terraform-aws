@@ -4,7 +4,7 @@ on:
   #branches: [ main ]
   #pull request: 
   #branches: [ main ]
-  workflow dispatch: 
+  workflow_dispatch: 
     inputs:
       rds_engine:
         type: choice 
