@@ -46,7 +46,7 @@ variable "db_name" {
 variable "port" {
   description = "The port on which the DB accepts connections"
   #type        = string
-  default = 5432
+  default = 3306
 }
 variable "max_allocated_storage" {
   description = "Specifies the value for Storage Autoscaling"
