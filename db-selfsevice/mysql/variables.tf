@@ -181,5 +181,5 @@ variable "machine_type" {
 variable "db-instance" {}
 variable "storage_type" {
   description = "The name of the storage type"
-  default = "gp2"
+  default     = "gp2"
 }
