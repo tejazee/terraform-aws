@@ -5,13 +5,13 @@ variable "identifier" {
 variable "engine" {
   description = "The database engine to use"
   #type        = string
-  default = docdb
+  default = "mysql"
 }
 
 variable "engine_version" {
   description = "The engine version to use"
   #type        = string
-  default = "4.0.0"
+  default = "8.0.32"
 }
 variable "instance_class" {
   description = "The instance type of the RDS instance"

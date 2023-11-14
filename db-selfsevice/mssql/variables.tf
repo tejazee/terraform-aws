@@ -5,13 +5,13 @@ variable "identifier" {
 variable "engine" {
   description = "The database engine to use"
   #type        = string
-  default = "postgres"
+  default = "sqlserver-ex"
 }
 
 variable "engine_version" {
   description = "The engine version to use"
   #type        = string
-  default = "14.7"
+  default = "15.00.4073.23.v1"
 }
 variable "instance_class" {
   description = "The instance type of the RDS instance"
@@ -46,7 +46,7 @@ variable "db_name" {
 variable "port" {
   description = "The port on which the DB accepts connections"
   #type        = string
-  default = 5432
+  default = "1433"
 }
 variable "max_allocated_storage" {
   description = "Specifies the value for Storage Autoscaling"
