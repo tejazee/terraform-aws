@@ -47,7 +47,7 @@ jobs:
 
     #steps represent a sequence of tasks that will be executed as part of the job  
 
-    steps: 
+     steps: 
       #checkout your repository  under $github_workspace, so your job can access it 
       - uses: actions/checkout@v2
         with:
