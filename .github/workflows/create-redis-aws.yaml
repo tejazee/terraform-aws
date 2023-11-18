@@ -38,12 +38,12 @@ on:
         description: "the name of the tags"     
         default: "acc name"      
   jobs:
-  Redis-DB-deploy:
-    runs-on: ubuntu-latest
-    env:
-      TF_WORKING_DIRECTORY: "terraform-aws/redis-ss/redis"
-      AWS_ACCESS_KEY_ID: "${{secrets.AWS_ACCESS_KEY_ID}}"
-      AWS_SECRET_ACCESS_KEY: "${{secrets.AWS_SECRET_ACCESS_KEY}}"
+    Redis-DB-deploy:
+      runs-on: ubuntu-latest
+      env:
+        TF_WORKING_DIRECTORY: "terraform-aws/redis-ss/redis"
+        AWS_ACCESS_KEY_ID: "${{secrets.AWS_ACCESS_KEY_ID}}"
+        AWS_SECRET_ACCESS_KEY: "${{secrets.AWS_SECRET_ACCESS_KEY}}"
 
     #steps represent a sequence of tasks that will be executed as part of the job  
 
