@@ -37,30 +37,32 @@ on:
         required: true 
         description: "the name of the tags"     
         default: "acc name"      
-jobs:
-  Redis-DB-deploy:
-    runs-on: ubuntu-latest
-    env:
-      #terraform working directory
-      TF_WORKING_DIRECTORY: "terraform-aws/redis-ss/redis"
-      AWS_ACCESS_KEY_ID: "${{secrets.AWS_ACCESS_KEY_ID}}"
-      AWS_SECRET_ACCESS_KEY: "${{secrets.AWS_SECRET_ACCESS_KEY}}"
-   #steps represents a sequence of tasks
-    steps:
-     #checkout your repository
-     - uses: actions/checkout@v2
-       with:
-         path: TERRAFORM-AWS
-         fetch-depth: "0"
-         ref: main
-     - name: Setup SSH
-       uses: MrSquaare /ssh-setup-auctions@v1
-       with:
-         host: github.com
-         private-key: "${{ secrets.SSH_PRIVATE_KEY }}"  
-     - uses: hashicorp/setup-terraform@v1
-       with:
-         terraform_version: 1.1.7
+
+  jobs:
+    Redis-DB-deploy:
+      runs-on: ubuntu-latest
+      env:
+        TF_WORKING_DIRECTORY: "terraform-aws/redis-ss/redis"
+        AWS_ACCESS_KEY_ID: "${{secrets.AWS_ACCESS_KEY_ID}}"
+        AWS_SECRET_ACCESS_KEY: "${{secrets.AWS_SECRET_ACCESS_KEY}}"
+
+    #steps represent a sequence of tasks that will be executed as part of the job  
+
+      steps: 
+      #checkout your repository  under $github_workspace, so your job can access it 
+      - uses: actions/checkout@v2
+        with:
+          path: terraform-aws
+          fetch-depth: "0"
+          ref: main
+      - name: Setuo SSH
+        uses: MrSquaare/ssh-setup-actions@v1
+        with:
+          host: github.com
+          private-key: ${{ secrets.SSH_PRIVATE_KEY }}   
+      - uses: harsicrop/setup-terraform@v1
+        with:
+          terraform_version: 1.1.7
 
       # Runs a set of commands using the runners shell
       - id: "terraform apply"
@@ -77,13 +79,3 @@ jobs:
           terraform validate -no-color
           terraform plan -no-color -lock=false -var="replication_group_id=${{github.event.inputs.replication_group_id}}" -var="node_type=${{github.event.inputs.node_type}}" -var="num_node_groups=${{github.event.inputs.num_node_groups}}" -var="engine_version=${{github.event.inputs.engine_version}}" -var="tags=${{github.event.inputs.tags}}"
           terraform apply -no-color -lock=false -var="replication_group_id=${{github.event.inputs.replication_group_id}}" -var="node_type=${{github.event.inputs.node_type}}" -var="num_node_groups=${{github.event.inputs.num_node_groups}}" -var="engine_version=${{github.event.inputs.engine_version}}" -var="tags=${{github.event.inputs.tags}}"
-
-                  
-            
-
-
-
-
-
-
-          
