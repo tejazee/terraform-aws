@@ -37,17 +37,17 @@ on:
         required: true 
         description: "the name of the tags"     
         default: "acc name"      
-jobs:
-  Redis-DB-deploy
+  jobs:
+  Redis-DB-deploy:
     runs-on: ubuntu-latest
-    env: 
+    env:
       TF_WORKING_DIRECTORY: "terraform-aws/redis-ss/redis"
       AWS_ACCESS_KEY_ID: "${{secrets.AWS_ACCESS_KEY_ID}}"
       AWS_SECRET_ACCESS_KEY: "${{secrets.AWS_SECRET_ACCESS_KEY}}"
 
     #steps represent a sequence of tasks that will be executed as part of the job  
 
-     steps: 
+      steps: 
       #checkout your repository  under $github_workspace, so your job can access it 
       - uses: actions/checkout@v2
         with:
@@ -78,6 +78,3 @@ jobs:
           terraform validate -no-color
           terraform plan -no-color -lock=false -var="replication_group_id=${{github.event.inputs.replication_group_id}}" -var="node_type=${{github.event.inputs.node_type}}" -var="num_node_groups=${{github.event.inputs.num_node_groups}}" -var="engine_version=${{github.event.inputs.engine_version}}" -var="tags=${{github.event.inputs.tags}}"
           terraform apply -no-color -lock=false -var="replication_group_id=${{github.event.inputs.replication_group_id}}" -var="node_type=${{github.event.inputs.node_type}}" -var="num_node_groups=${{github.event.inputs.num_node_groups}}" -var="engine_version=${{github.event.inputs.engine_version}}" -var="tags=${{github.event.inputs.tags}}"
-
-                  
-            
