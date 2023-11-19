@@ -75,7 +75,7 @@ jobs:
          cat backend.tf
          rm -rf .terraform
          terraform init --backend-config="access_key=${{secrets.AWS_ACCESS_KEY_ID}}" --backend-config="secret_key=${{secrets.AWS_SECRET_ACCESS_KEY}}" 
-        # terraform force-unlock -force <lock id>
+         # terraform force-unlock -force <lock id>
          terraform validate -no-color
          terraform plan -no-color -lock=false -var="replication_group_id=${{github.event.inputs.replication_group_id}}" -var="node_type=${{github.event.inputs.node_type}}" -var="num_node_groups=${{github.event.inputs.num_node_groups}}" -var="engine_version=${{github.event.inputs.engine_version}}" -var="tags=${{github.event.inputs.tags}}"
          terraform apply -no-color -lock=false -var="replication_group_id=${{github.event.inputs.replication_group_id}}" -var="node_type=${{github.event.inputs.node_type}}" -var="num_node_groups=${{github.event.inputs.num_node_groups}}" -var="engine_version=${{github.event.inputs.engine_version}}" -var="tags=${{github.event.inputs.tags}}"
