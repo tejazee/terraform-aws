@@ -1,29 +1,29 @@
 name: create-lambda-functions
-  on:
-    workflow_dispatch
-      inputs:
-        function_name:
-          required: true
-          description: "the name of lambda function"
-          default: "Enter the lambda function name"
-        role:
-          required: true
-          description: "attaching the role"  
-          default: "Enter the iam role"
-        run-time: 
-          type: choice
-          description: "select the run time"
-          options:
-            - Node.js 20.x
-            - java 21
-            - Go 1.x
-            - python 3.11   
-            - .NET 6(C#/powerShell)
-            - Ruby 3.2
-        tags:
-          required: true
-          description: "the name of the env"
-          description: "enter env name"
+on:
+  workflow_dispatch
+    inputs:
+      function_name:
+        required: true
+        description: "the name of lambda function"
+        default: "Enter the lambda function name"
+      role:
+        required: true
+        description: "attaching the role"  
+        default: "Enter the iam role"
+      run-time: 
+        type: choice
+        description: "select the run time"
+        options:
+          - Node.js 20.x
+          - java 21
+          - Go 1.x
+          - python 3.11   
+          - .NET 6(C#/powerShell)
+          - Ruby 3.2
+      tags:
+        required: true
+        description: "the name of the env"
+        description: "enter env name"
 
 jobs:
   Lambda-deploy
