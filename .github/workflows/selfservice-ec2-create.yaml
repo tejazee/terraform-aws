@@ -59,7 +59,7 @@ jobs:
          cd ${{ env.TF_WORKING_DIRECTORY }}
          cp backend.tf.example backend.tf
          ls-lrt
-         sed -i 's/UPDATEENV/${{github.events.inputs.replication_group_id}}/' backend.tf
+         sed -i 's/UPDATEENV/${{github.events.inputs.name}}/' backend.tf
          cat backend.tf
          rm -rf .terraform
          terraform init --backend-config="access_key=${{secrets.AWS_ACCESS_KEY_ID}}" --backend-config="secret_key=${{secrets.AWS_SECRET_ACCESS_KEY}}" 

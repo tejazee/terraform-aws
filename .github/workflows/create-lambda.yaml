@@ -1,0 +1,67 @@
+name: create-lambda-functions
+  on:
+    workflow_dispatch
+      inputs:
+        function_name:
+          required: true
+          description: "the name of lambda function"
+          default: "Enter the lambda function name"
+        role:
+          required: true
+          description: "attaching the role"  
+          default: "Enter the iam role"
+        run-time: 
+          type: choice
+          description: "select the run time"
+          options:
+            - Node.js 20.x
+            - java 21
+            - Go 1.x
+            - python 3.11   
+            - .NET 6(C#/powerShell)
+            - Ruby 3.2
+        tags:
+          required: true
+          description: "the name of the env"
+          description: "enter env name"
+
+jobs:
+  Lambda-deploy
+    runs-on: ubuntu-latest
+      env:
+        TF_WORKING_DIRECTORY: "terraform-aws/lambda-srv/laambda/lambda-functions"
+        AWS_ACCESS_KEY_ID: "${{secrets.AWS_ACCESS_KEY_ID}}"
+        AWS_SECRET_ACCESS_KEY: "${{secrets.AWS_SECRET_ACCESS_KEY}}" 
+
+      steps: 
+      #checkout your repository  under $github_workspace, so your job can access it 
+        - uses: actions/checkout@v2
+          with:
+            path: terraform-aws
+            fetch-depth: "0"
+            ref: main
+        - name: Setuo SSH
+          uses: MrSquaare/ssh-setup-actions@v1
+          with:
+            host: github.com
+            #private-key: ${{ secrets.SSH_PRIVATE_KEY }}   
+        - uses: harsicrop/setup-terraform@v1
+          with:
+            terraform_version: 1.1.7
+
+        # Runs a set of commands using the runners shell
+        - id: "terraform apply"
+          name: Terraform apply
+          run: |
+            cd ${{ env.TF_WORKING_DIRECTORY }}
+            cp backend.tf.example backend.tf
+            ls-lrt
+            sed -i 's/UPDATEENV/${{github.events.inputs.function_name}}/' backend.tf
+            cat backend.tf
+            rm -rf .terraform
+            terraform init --backend-config="access_key=${{secrets.AWS_ACCESS_KEY_ID}}" --backend-config="secret_key=${{secrets.AWS_SECRET_ACCESS_KEY}}" 
+            # terraform force-unlock -force <lock id>
+            terraform validate -no-color
+            terraform plan -no-color -lock=false -var="name=${{github.event.inputs.function_name}}" -var="role=${{github.event.inputs.role}}" -var="run-time=${{github.event.inputs.run-time}}" -var="tags=${{github.event.inputs.tags}}"
+            terraform apply -no-color -lock=false -var="name=${{github.event.inputs.function_name}}" -var="role=${{github.event.inputs.role}}" -var="run-time=${{github.event.inputs.run-time}}" -var="tags=${{github.event.inputs.tags}}"          
+
