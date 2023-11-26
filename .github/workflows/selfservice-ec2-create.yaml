@@ -36,7 +36,7 @@ jobs:
       AWS_SECRET_ACCESS_KEY: "${{secrets.AWS_SECRET_ACCESS_KEY}}" 
 
 
-  steps: 
+    steps: 
       #checkout your repository  under $github_workspace, so your job can access it 
      - uses: actions/checkout@v2
        with:
