@@ -58,7 +58,7 @@ jobs:
        uses: MrSquaare /ssh-setup-auctions@v1
        with:
          host: github.com
-         private-key: "${{ secrets.SSH_PRIVATE_KEY }}"  
+         #private-key: "${{ secrets.SSH_PRIVATE_KEY }}"  
      - uses: hashicorp/setup-terraform@v1
        with:
          terraform_version: 1.1.7

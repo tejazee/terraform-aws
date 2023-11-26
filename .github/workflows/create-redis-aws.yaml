@@ -59,7 +59,7 @@ jobs:
        uses: MrSquaare/ssh-setup-actions@v1
        with:
          host: github.com
-         private-key: ${{ secrets.SSH_PRIVATE_KEY }}   
+         #private-key: ${{ secrets.SSH_PRIVATE_KEY }}   
      - uses: harsicrop/setup-terraform@v1
        with:
          terraform_version: 1.1.7
@@ -68,7 +68,7 @@ jobs:
      - id: "terraform apply"
        name: Terraform apply
        run: |
-         cd ${{ env.TF_WORKING_DIRECTORY_DEV }}
+         cd ${{ env.TF_WORKING_DIRECTORY }}
          cp backend.tf.example backend.tf
          ls-lrt
          sed -i 's/UPDATEENV/${{github.events.inputs.replication_group_id}}/' backend.tf
